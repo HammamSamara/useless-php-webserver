@@ -1,0 +1,29 @@
+#!/usr/bin/env php
+<?php
+
+use BuildX\PHPServer\Server;
+use BuildX\PHPServer\Request;
+use BuildX\PHPServer\Response;
+
+// Ignore first argument
+array_shift($argv);
+
+$port = 8008;
+
+if (! empty($argv)) {
+    $port = array_shift($argv);
+}
+
+require __DIR__ . '/vendor/autoload.php';
+
+// Create new server
+
+$server = new Server('localhost', $port);
+
+// Start listening
+$server->listen( function (Request $request) {
+    // Print information that we received the request
+    echo $request->method() . ' ' . $request->uri() . "\n";
+
+    return new Response( '<pre>'.print_r( $request, true ).'</pre>' );
+});
